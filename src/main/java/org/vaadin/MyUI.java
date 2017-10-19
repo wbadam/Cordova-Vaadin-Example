@@ -7,6 +7,7 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -25,6 +26,13 @@ public class MyUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         final VerticalLayout layout = new VerticalLayout();
+
+        // This message is caught in vaadinMobile.js and removes the load
+        // screen. Note: If this was being done using JSNI (gwt managed client
+        // side code) you should use $wnd instead of window to access the window
+        // element.
+        JavaScript.getCurrent()
+        .execute("window.parent.postMessage('vaadin-ready', '*')");
         
         final TextField name = new TextField();
         name.setCaption("Type your name here:");
